@@ -8,58 +8,53 @@ public class WeaponManager : MonoBehaviour
     [SerializeField]
     private WeaponHandler[] weapon;
 
-    private int currentWeaponIndex;
+    public int currentWeaponIndex;
 
     // Start is called before the first frame update
     void Start()
     {
         currentWeaponIndex = 0;
-        weapon[currentWeaponIndex].gameObject.SetActive(true);
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Alpha1))
+        if (Input.GetKeyDown(KeyCode.B))
         {
-            TurnOnSelectedWeapon(0);
+            weapon[currentWeaponIndex].gameObject.SetActive(false);
         }
-        
-        if (Input.GetKeyDown(KeyCode.Alpha2))
+        else if (Input.GetKeyDown(KeyCode.N))
         {
-            TurnOnSelectedWeapon(1);
+            weapon[currentWeaponIndex].gameObject.SetActive(true);
         }
-        
-        if (Input.GetKeyDown(KeyCode.Alpha3))
+        else
         {
-            TurnOnSelectedWeapon(2);
-        }
-        
-        if (Input.GetKeyDown(KeyCode.Alpha4))
-        {
-            TurnOnSelectedWeapon(3);
-        }
-        
-        if (Input.GetKeyDown(KeyCode.Alpha5))
-        {
-            TurnOnSelectedWeapon(4);
-        }
-        
-        if (Input.GetKeyDown(KeyCode.Alpha6))
-        {
-            TurnOnSelectedWeapon(5);
+            if (CurrentWeapon.currentActiveWeapon > 0)
+            {
+                weaponLoader(CurrentWeapon.currentActiveWeapon);
+            }
+            else if (CurrentWeapon.currentActiveWeapon == 0)
+            {
+                weapon[currentWeaponIndex].gameObject.SetActive(false);
+            }
         }
     }
 
-    void TurnOnSelectedWeapon(int weaponIndex)
+    public void weaponLoader(int index)
     {
-        if (currentWeaponIndex == weaponIndex)
+        //print(currentWeaponIndex);
+        //print(index);
+        if (index > 0)
         {
-            return;
+            if (currentWeaponIndex == (index - 1))
+            {
+                return;
+            }
+            weapon[currentWeaponIndex].gameObject.SetActive(false);
         }
-        weapon[currentWeaponIndex].gameObject.SetActive(false);
-        weapon[weaponIndex].gameObject.SetActive(true);
-        currentWeaponIndex = weaponIndex;
+        weapon[index - 1].gameObject.SetActive(true);
+        currentWeaponIndex = index - 1;
+
     }
 
     public WeaponHandler GetCurrentSelectedWeapon()

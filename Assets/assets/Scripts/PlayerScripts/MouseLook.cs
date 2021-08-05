@@ -65,13 +65,13 @@ public class MouseLook : MonoBehaviour
             if (Cursor.lockState == CursorLockMode.Locked)
             {
                 Cursor.lockState = CursorLockMode.None;
+                Cursor.visible = true;
             }
             else
             {
                 Cursor.lockState = CursorLockMode.Locked;
                 Cursor.visible = false;
             }
-
         }
     }
 
@@ -84,7 +84,7 @@ public class MouseLook : MonoBehaviour
 
         lookAngles.x = Mathf.Clamp(lookAngles.x, defaultLookLimts.x, defaultLookLimts.y);
 
-        //currentRollAngle = Mathf.Lerp(currentRollAngle, Input.GetAxisRaw(MouseAxis.mouseX) * rollAngle, Time.deltaTime * rollSpeed);
+        currentRollAngle = Mathf.Lerp(currentRollAngle, Input.GetAxisRaw(MouseAxis.mouseX) * rollAngle, Time.deltaTime * rollSpeed);
 
         lookAtRoot.localRotation = Quaternion.Euler(lookAngles.x, 0f, 0f);
         playerRoot.localRotation = Quaternion.Euler(0f, lookAngles.y, 0f);

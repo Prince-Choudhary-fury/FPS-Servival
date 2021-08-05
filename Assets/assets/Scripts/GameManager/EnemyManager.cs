@@ -22,12 +22,13 @@ public class EnemyManager : MonoBehaviour
 
     private int initialCanibleCount;
     private int initialBoarCount;
-
+    private GameObject Enemy;
     public float waitBeforeSpawn = 3f;
 
     // Start is called before the first frame update
     void Awake()
     {
+        Enemy = new GameObject("Enemy");
         MakeInstance();
     }
 
@@ -65,7 +66,7 @@ public class EnemyManager : MonoBehaviour
             {
                 index = 0;
             }
-            Instantiate(canniblePrefeb, cannibleSpawnPoint[index].position, Quaternion.identity);
+            Instantiate(canniblePrefeb, cannibleSpawnPoint[index].position, Quaternion.identity, Enemy.transform);
             index++;
         }
         canibleCount = 0;
@@ -81,7 +82,7 @@ public class EnemyManager : MonoBehaviour
             {
                 index = 0;
             }
-            Instantiate(boarPrefeb, boarSpawnPoint[index].position, Quaternion.identity);
+            Instantiate(boarPrefeb, boarSpawnPoint[index].position, Quaternion.identity, Enemy.transform);
             index++;
         }
         boarCount = 0;

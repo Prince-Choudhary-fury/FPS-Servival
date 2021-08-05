@@ -116,14 +116,13 @@ public class HealthScript : MonoBehaviour
             for (int i = 0; i < enemies.Length; i++)
             {
                 enemies[i].GetComponent<EnemyController>().enabled = false;
-
+            }
                 //call enemy manager to stop spawning enemies
                 EnemyManager.instance.StopSpawning();
 
                 GetComponent<PlayerMovement>().enabled = false;
                 GetComponent<PlayerAttack>().enabled = false;
                 GetComponent<WeaponManager>().GetCurrentSelectedWeapon().gameObject.SetActive(false);
-            }
 
         }
 
@@ -151,7 +150,7 @@ public class HealthScript : MonoBehaviour
 
     void TurnOffGameObject()
     {
-        gameObject.SetActive(false);
+        Destroy(this.gameObject);
     }
 
 }

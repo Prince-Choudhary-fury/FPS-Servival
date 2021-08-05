@@ -11,6 +11,7 @@ public enum WeaponAim
 
 public enum WeaponFireType
 {
+    None,
     Single,
     Multiple
 }

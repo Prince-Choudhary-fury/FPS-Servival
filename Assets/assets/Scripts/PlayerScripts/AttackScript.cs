@@ -9,6 +9,9 @@ public class AttackScript : MonoBehaviour
     public float radius = 1f;
 
     public LayerMask layerMask;
+    public LayerMask layerMaskObj;
+
+    public AudioSource treeChoping;
 
     // Update is called once per frame
     void Update()
@@ -22,5 +25,18 @@ public class AttackScript : MonoBehaviour
 
             gameObject.SetActive(false);
         }
+
+        Collider[] hitObj = Physics.OverlapSphere(transform.position, radius, layerMaskObj);
+
+        if(hitObj.Length > 0)
+        {
+            if(hitObj[0].tag == Tags.Tree)
+            {
+                treeChoping.Play();
+            }
+            hitObj[0].gameObject.GetComponent<choping>().ApplyDamage(damage);
+            gameObject.SetActive(false);
+        }
+
     }
 }

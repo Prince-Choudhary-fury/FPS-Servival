@@ -10,6 +10,17 @@ TagManager:
   - FPCamera
   - Arrow
   - Enemy
+  - Buildable
+  - Ground
+  - BuildSystem
+  - Floar
+  - Wall
+  - Stears
+  - Roof
+  - Tree
+  - Item
+  - Equip
+  - Slot
   layers:
   - Default
   - TransparentFX
@@ -21,12 +32,12 @@ TagManager:
   - Enemy
   - Player
   - BuildPreview
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
+  - Floar
+  - Ground
+  - Wall
+  - Stears
+  - Roof
+  - Tree
   - 
   - 
   - 
