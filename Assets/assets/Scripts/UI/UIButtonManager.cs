@@ -14,11 +14,15 @@ public class UIButtonManager : MonoBehaviour
     public GameObject buildMenu;
     public GameObject craftPanal;
 
+    [SerializeField]
+    private GameObject UICanves;
+
     public BuildingProjector buildingProjector;
 
     [SerializeField]
     private TextMeshProUGUI objTitleName;
 
+    public static bool isBuildOpened;
     private int currentObjIndex;
     // Start is called before the first frame update
     void Start()
@@ -31,22 +35,21 @@ public class UIButtonManager : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.B))
         {
+            isBuildOpened = true;
+            UICanves.SetActive(false);
             buildingPlan.SetActive(true);
             Destroy(buildingProjector.currentPrevObject);
             player.GetComponent<BuildingProjector>().enabled = false;
             buildMenu.SetActive(true);
-            Cursor.lockState = CursorLockMode.None;
-            Cursor.visible = true;
             pauseGame(false);
         }
-        if (Input.GetKeyDown(KeyCode.N))
+        else if (Input.GetKeyDown(KeyCode.N))
         {
+            UICanves.SetActive(true);
             buildingPlan.SetActive(false);
             Destroy(buildingProjector.currentPrevObject);
             player.GetComponent<BuildingProjector>().enabled = false;
             buildMenu.SetActive(false);
-            Cursor.lockState = CursorLockMode.Locked;
-            Cursor.visible = false;
             pauseGame(true);
         }
     }
@@ -60,9 +63,11 @@ public class UIButtonManager : MonoBehaviour
 
     public void craftButton()
     {
+        isBuildOpened = false;
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
         pauseGame(true);
+        //isBPressed = false;
         buildMenu.GetComponent<Animator>().Play(AnimationsName.inverseAnim);
         Invoke("StartGame", 2);
     }

@@ -64,15 +64,33 @@ public class MouseLook : MonoBehaviour
         {
             if (Cursor.lockState == CursorLockMode.Locked)
             {
-                Cursor.lockState = CursorLockMode.None;
-                Cursor.visible = true;
+                EnableCursore();
             }
             else
             {
-                Cursor.lockState = CursorLockMode.Locked;
-                Cursor.visible = false;
+                DesableCursore();
             }
         }
+        else if(InventoryController.inventoryEnabled || UIButtonManager.isBuildOpened)
+        {
+            EnableCursore();
+        }
+        else
+        {
+            DesableCursore();
+        }
+    }
+
+    private void EnableCursore()
+    {
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+    }
+
+    private void DesableCursore()
+    {
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
     }
 
     private void LookAround()

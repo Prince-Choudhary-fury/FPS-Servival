@@ -78,12 +78,14 @@ public class AnimationsName
     //obj
     public const string treeFall = "treeFallingAnim";
     public const string Empty = "Empty";
+    public const string FallenTree = "FallenTreeAnim";
 }
 
 public class ItemType
 {
     public const string Weapon = "Weapon";
     public const string bag = "Bag";
+    public const string resources = "Resources";
 
     public const int bagLevelOne = 15;
     public const int bagLevelTwo = 16;

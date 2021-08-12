@@ -8,12 +8,19 @@ public class choping : MonoBehaviour
     public float treeHealth = 100f;
     public int availableWood = 30;
 
+    public GameObject woodPrefeb;
+
+    [SerializeField]
+    private GameObject woodParent;
+
+    private GameObject wood;
+
     public WeaponManager playerWeaponManager;
 
     // Start is called before the first frame update
     void Start()
     {
-        
+
     }
 
     // Update is called once per frame
@@ -37,8 +44,11 @@ public class choping : MonoBehaviour
     IEnumerator FallAnim()
     {
         this.GetComponent<Animator>().Play(AnimationsName.treeFall);
-        yield return new WaitForSeconds(4);
-        this.GetComponent<Animator>().Play(AnimationsName.Empty);
+        yield return new WaitForSeconds(2);
+        this.GetComponent<Animator>().Play(AnimationsName.FallenTree);
+        Vector3 pos = this.transform.position + new Vector3(0, 0.5f, 0);
+        wood = Instantiate(woodPrefeb, pos, Quaternion.identity, woodParent.transform);
+        yield return new WaitForSeconds(0.5f);
         Destroy(this.gameObject);
     }
 

@@ -87,10 +87,10 @@ public class Drop : MonoBehaviour, IDropHandler
 
         //storing the current store in temp
         Sprite tempSprite = this.transform.GetChild(0).GetComponent<Image>().sprite;
-        //GameObject tempItem = this.gameObject.GetComponent<slot>().Item;
         Transform tempSlotIcon = this.gameObject.GetComponent<slot>().slotIconGO;
         int tempID = this.gameObject.GetComponent<slot>().id;
         string tempType = this.gameObject.GetComponent<slot>().type;
+        int tempQty = this.gameObject.GetComponent<slot>().qty;
         string tempDescription = this.gameObject.GetComponent<slot>().description;
         Sprite tempIcon = this.gameObject.GetComponent<slot>().icon;
 
@@ -99,15 +99,8 @@ public class Drop : MonoBehaviour, IDropHandler
         //print(currentDrag.objParent.name);
 
         //for slot on which the item is dragged
-        //this.transform.GetChild(1).SetParent(currentDrag.objParent.transform);
         this.transform.GetChild(0).GetComponent<Image>().sprite = currentDrag.currentDraggingObj.GetComponent<Image>().sprite;
-
-        //this.gameObject.GetComponent<slot>().Item = currentDrag.objParent.GetComponent<slot>().Item;
-        this.gameObject.GetComponent<slot>().slotIconGO = currentDrag.objParent.GetComponent<slot>().slotIconGO;
-        this.gameObject.GetComponent<slot>().id = currentDrag.objParent.GetComponent<slot>().id;
-        this.gameObject.GetComponent<slot>().type = currentDrag.objParent.GetComponent<slot>().type;
-        this.gameObject.GetComponent<slot>().description = currentDrag.objParent.GetComponent<slot>().description;
-        this.gameObject.GetComponent<slot>().icon = currentDrag.objParent.GetComponent<slot>().icon;
+        setThisObject(currentDrag.objParent.GetComponent<slot>().slotIconGO, currentDrag.objParent.GetComponent<slot>().id, currentDrag.objParent.GetComponent<slot>().type, currentDrag.objParent.GetComponent<slot>().description, currentDrag.objParent.GetComponent<slot>().icon, currentDrag.objParent.GetComponent<slot>().qty);
         
         //***************************************************************************************************************************//
         
@@ -115,14 +108,7 @@ public class Drop : MonoBehaviour, IDropHandler
 
         currentDrag.objParent.transform.GetChild(0).SetParent(this.transform);
         currentDrag.currentDraggingObj.GetComponent<Image>().sprite = tempSprite;
-
-        //currentDrag.objParent.GetComponent<slot>().Item = tempItem;
-        currentDrag.objParent.GetComponent<slot>().slotIconGO = tempSlotIcon;
-        currentDrag.objParent.GetComponent<slot>().id = tempID;
-        currentDrag.objParent.GetComponent<slot>().type = tempType;
-        currentDrag.objParent.GetComponent<slot>().description = tempDescription;
-        currentDrag.objParent.GetComponent<slot>().icon = tempIcon;
-        //print("Slot sets to its default (NULL) value");
+        currentDragValueSet(currentDrag, tempSlotIcon, tempID, tempType, tempDescription, tempIcon, tempQty);
 
     }
 
@@ -132,7 +118,6 @@ public class Drop : MonoBehaviour, IDropHandler
 
         currentDrag.objParent.GetComponent<Drop>().enabled = true;
 
-        //currentDrag.objParent.transform.GetChild(0).SetParent(this.transform);
         currentDrag.currentDraggingObj.GetComponent<drag>().enabled = false;
         currentDrag.currentDraggingObj.GetComponent<Image>().sprite = currentDrag.defaultSprite;
         if (currentDrag.objParent.tag == Tags.Equipable)
@@ -145,14 +130,9 @@ public class Drop : MonoBehaviour, IDropHandler
         }
         //print("Sprite Reseted to default of previous slot");
 
-        //currentDrag.objParent.GetComponent<slot>().Item = null;
-        currentDrag.objParent.GetComponent<slot>().slotIconGO = currentDrag.objParent.transform.GetChild(0).transform;
-        currentDrag.objParent.GetComponent<slot>().id = 0;
-        currentDrag.objParent.GetComponent<slot>().type = null;
-        currentDrag.objParent.GetComponent<slot>().description = null;
+        Transform transform = currentDrag.objParent.transform.GetChild(0).transform;
+        currentDragValueSet(currentDrag, transform, 0, null, null, null, 0);
         currentDrag.objParent.GetComponent<slot>().empty = true;
-        currentDrag.objParent.GetComponent<slot>().icon = null;
-        //print("Slot sets to its default (NULL) value");
 
         currentDrag.currentDraggingObj.GetComponent<drag>().enabled = false;
         currentDrag.currentDraggingObj.GetComponent<drag>().currentDraggingObj = null;
@@ -163,14 +143,37 @@ public class Drop : MonoBehaviour, IDropHandler
         this.transform.GetChild(0).GetComponent<Image>().sprite = currentDrag.currentDraggingObj.GetComponent<Image>().sprite;
         this.transform.GetChild(0).GetComponent<Image>().color = new Color32(255, 255, 255, 255);
         this.transform.GetChild(0).GetComponent<drag>().enabled = true;
-        //print("Sprite transfered to droped slots and draging enableded there");
 
-        //this.gameObject.GetComponent<slot>().Item = currentDrag.objParent.GetComponent<slot>().Item;
-        this.gameObject.GetComponent<slot>().slotIconGO = currentDrag.objParent.GetComponent<slot>().slotIconGO;
-        this.gameObject.GetComponent<slot>().id = currentDrag.objParent.GetComponent<slot>().id;
-        this.gameObject.GetComponent<slot>().type = currentDrag.objParent.GetComponent<slot>().type;
-        this.gameObject.GetComponent<slot>().description = currentDrag.objParent.GetComponent<slot>().description;
+        //print("Sprite transfered to droped slots and draging enableded there");
+        setThisObject(currentDrag.objParent.GetComponent<slot>().slotIconGO, currentDrag.objParent.GetComponent<slot>().id, currentDrag.objParent.GetComponent<slot>().type, currentDrag.objParent.GetComponent<slot>().description, currentDrag.objParent.GetComponent<slot>().icon, currentDrag.objParent.GetComponent<slot>().qty);
         this.gameObject.GetComponent<slot>().empty = false;
-        this.gameObject.GetComponent<slot>().icon = currentDrag.objParent.GetComponent<slot>().icon;
     }
+
+    private void currentDragValueSet(drag currentDrag, Transform transform, int ID, string Type, string Description, Sprite Icon, int qty)
+    {
+        currentDrag.objParent.GetComponent<slot>().slotIconGO = transform;
+        currentDrag.objParent.GetComponent<slot>().id = ID;
+        currentDrag.objParent.GetComponent<slot>().type = Type;
+        //print(qty);
+        currentDrag.objParent.GetComponent<slot>().qty = qty;
+        currentDrag.currentDraggingObj.transform.GetChild(0).GetComponent<Text>().text = null;
+        currentDrag.objParent.GetComponent<slot>().description = Description;
+        currentDrag.objParent.GetComponent<slot>().icon = Icon;
+    }
+
+    private void setThisObject(Transform transform, int ID, string Type, string Description, Sprite Icon, int qty)
+    {
+        this.gameObject.GetComponent<slot>().slotIconGO = transform;
+        this.gameObject.GetComponent<slot>().id = ID;
+        this.gameObject.GetComponent<slot>().type = Type;
+        if (Type == ItemType.resources)
+        {
+            print(qty);
+            this.gameObject.GetComponent<slot>().qty = qty;
+            this.transform.GetChild(0).transform.GetChild(0).GetComponent<Text>().text = "" + qty;
+        }
+        this.gameObject.GetComponent<slot>().description = Description;
+        this.gameObject.GetComponent<slot>().icon = Icon;
+    }
+
 }

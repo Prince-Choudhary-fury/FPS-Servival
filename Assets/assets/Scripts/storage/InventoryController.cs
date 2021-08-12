@@ -1,20 +1,22 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class InventoryController : MonoBehaviour
 {
 
-    private bool inventoryEnabled;
+    public static bool inventoryEnabled = false;
 
     public GameObject inventory;
-    public GameObject crossHairCanvas;
     public GameObject UICanvas;
 
     private int allSlots;
     private int enabledSlots = 10;
     private GameObject[] slots;
     private GameObject ItemPickedUp;
+
+    private int maxResourcesAllowed = 20;
 
     public GameObject slotHolder;
 
@@ -36,29 +38,29 @@ public class InventoryController : MonoBehaviour
 
     void Update()
     {
+        if (InventoryBox.enableInventry)
+        {
+            inventoryEnabled = true;
+            InventoryBox.enableInventry = false;
+        }
         if (Input.GetKeyDown(KeyCode.I))
         {
             inventoryEnabled = !inventoryEnabled;
         }
         if (inventoryEnabled)
         {
-            crossHairCanvas.SetActive(false);
             UICanvas.SetActive(false);
-            Cursor.lockState = CursorLockMode.None;
             inventoryActiveator(true, false);
         }
         else
         {
-            crossHairCanvas.SetActive(true);
             UICanvas.SetActive(true);
-            Cursor.lockState = CursorLockMode.Locked;
             inventoryActiveator(false, true);
         }
     }
 
     private void inventoryActiveator(bool value, bool value1)
     {
-        Cursor.visible = value;
         this.GetComponent<CharacterController>().enabled = value1;
         this.GetComponent<PlayerMovement>().enabled = value1;
         this.GetComponent<WeaponManager>().enabled = value1;
@@ -69,16 +71,16 @@ public class InventoryController : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         //print("Trigger");
-        if (other.tag == "Item")
+        if (other.tag == "Item" )
         {
             ItemPickedUp = other.gameObject;
             Item item = ItemPickedUp.GetComponent<Item>();
-            AddItem(ItemPickedUp, item.id, item.type, item.description, item.icon);
+            AddItem(ItemPickedUp, item.id, item.type, item.description, item.icon, item.qty);
             Destroy(other.gameObject);
         }
     }
 
-    void AddItem(GameObject itemObject, int itemID, string itemType, string itemDiscription, Sprite itemIcon)
+    void AddItem(GameObject itemObject, int itemID, string itemType, string itemDiscription, Sprite itemIcon, int qty)
     {
         for (int i = 0; i < allSlots; i++)
         {
@@ -91,18 +93,37 @@ public class InventoryController : MonoBehaviour
                 slots[i].transform.GetChild(0).transform.GetComponent<drag>().enabled = true;
                 //add item to slot
                 itemObject.GetComponent<Item>().pickedUp = true;
-                //slots[i].GetComponent<slot>().Item = itemObject;
                 slots[i].GetComponent<slot>().icon = itemIcon;
                 slots[i].GetComponent<slot>().type = itemType;
                 slots[i].GetComponent<slot>().id = itemID;
                 slots[i].GetComponent<slot>().description = itemDiscription;
-
+                if (itemType == ItemType.resources)
+                {
+                    print(slots[i].GetComponent<slot>().qty);
+                    int tempQty = slots[i].GetComponent<slot>().qty;
+                    slots[i].GetComponent<slot>().qty = tempQty + qty;
+                    slots[i].transform.GetChild(0).transform.GetChild(0).GetComponent<Text>().text = "" + slots[i].GetComponent<slot>().qty;
+                    //slots[i].GetComponent<slot>().qty = qty;
+                }
                 itemObject.transform.SetParent(slots[i].transform);
                 itemObject.SetActive(false);
 
                 slots[i].GetComponent<slot>().UpdateSlot();
-                slots[i].GetComponent<slot>().empty = false;
-                //slots[i].GetComponent<Drop>().enabled = false;
+                if (itemType == ItemType.resources)
+                {
+                    if (slots[i].GetComponent<slot>().qty == maxResourcesAllowed)
+                    {
+                        slots[i].GetComponent<slot>().empty = false;
+                    }
+                    else
+                    {
+                        slots[i].GetComponent<slot>().empty = true;
+                    }
+                }
+                else
+                {
+                    slots[i].GetComponent<slot>().empty = false;
+                }
             }
         }
     }

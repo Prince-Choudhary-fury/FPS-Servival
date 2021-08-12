@@ -11,5 +11,9 @@ public class CurrentWeapon : MonoBehaviour
     void Update()
     {
         currentActiveWeapon = GetComponent<slot>().id;
+        if (currentActiveWeapon == 0)
+        {
+            WeaponManager.weaponLoaded = false;
+        }
     }
 }

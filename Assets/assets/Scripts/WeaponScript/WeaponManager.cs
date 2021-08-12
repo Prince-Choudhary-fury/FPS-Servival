@@ -10,6 +10,8 @@ public class WeaponManager : MonoBehaviour
 
     public int currentWeaponIndex;
 
+    public static bool weaponLoaded = false;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -46,14 +48,19 @@ public class WeaponManager : MonoBehaviour
         //print(index);
         if (index > 0)
         {
-            if (currentWeaponIndex == (index - 1))
+            if (weaponLoaded && currentWeaponIndex == index - 1)
             {
                 return;
             }
             weapon[currentWeaponIndex].gameObject.SetActive(false);
+            currentWeaponIndex = index - 1;
+            weapon[currentWeaponIndex].gameObject.SetActive(true);
+            weaponLoaded = true;
         }
-        weapon[index - 1].gameObject.SetActive(true);
-        currentWeaponIndex = index - 1;
+        else
+        {
+            weapon[currentWeaponIndex].gameObject.SetActive(false);
+        }
 
     }
 

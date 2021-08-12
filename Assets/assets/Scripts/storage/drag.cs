@@ -24,7 +24,6 @@ public class drag : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHand
     {
         //print("dragging");
         isDraging = true;
-        //this.transform.parent.GetComponent<Drop>().enabled = false;
         currentDraggingObj = this.gameObject;
         this.GetComponent<CanvasGroup>().blocksRaycasts = false;
         this.transform.SetParent(Inventory.transform);
@@ -42,6 +41,5 @@ public class drag : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHand
         this.transform.position = objParent.transform.position;
         this.transform.SetParent(objParent.transform);
         isDraging = false;
-        //this.transform.parent.GetComponent<Drop>().enabled = true;
     }
 }

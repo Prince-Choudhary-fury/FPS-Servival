@@ -33,8 +33,8 @@ public class AttackScript : MonoBehaviour
             if(hitObj[0].tag == Tags.Tree)
             {
                 treeChoping.Play();
+                hitObj[0].gameObject.GetComponent<choping>().ApplyDamage(damage);
             }
-            hitObj[0].gameObject.GetComponent<choping>().ApplyDamage(damage);
             gameObject.SetActive(false);
         }
 

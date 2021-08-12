@@ -27,6 +27,7 @@ public class BuildingProjector : MonoBehaviour
     public LayerMask layerforFloar;
     public LayerMask layerforWall;
     public LayerMask layerforStears;
+    public LayerMask layerforInStears;
     public LayerMask layerforRoof;
 
     public float offset = 1f;
@@ -45,6 +46,7 @@ public class BuildingProjector : MonoBehaviour
 
     void Update()
     {
+        print(index);
         //cast ray for floar
         if (index == 0)
         {
@@ -63,6 +65,10 @@ public class BuildingProjector : MonoBehaviour
         else if (index == 3)
         {
             castRayToProjectRoof();
+        }
+        else if (index == 4)
+        {
+            castRayToProjectInStears();
         }
         if (Input.GetKeyDown(KeyCode.Mouse0))
         {
@@ -94,6 +100,14 @@ public class BuildingProjector : MonoBehaviour
     public void castRayToProjectStears()
     {
         if (Physics.Raycast(cam.position, cam.forward, out hit, maxRaycastRange, layerforStears))
+        {
+            castRay();
+        }
+    }
+
+    public void castRayToProjectInStears()
+    {
+        if (Physics.Raycast(cam.position, cam.forward, out hit, maxRaycastRange, layerforInStears))
         {
             castRay();
         }
@@ -149,7 +163,7 @@ public class BuildingProjector : MonoBehaviour
         //snapping preview obbjects to hited snap point
         currentPos = hit.transform.position;
         currentPreview.position = currentPos;
-        if (index != 2)
+        if (index != 2 && index != 4)
         {
             currentRotation = hit.transform.eulerAngles;
             currentPreview.localEulerAngles = currentRotation;
